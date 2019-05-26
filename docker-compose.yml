@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: postgres:10
+    restart: always
+    volumes:
+      - ./.persistence/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  web:
+    build: .
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - 127.0.0.1:3001:3000
+    depends_on:
+      - db
+    environment:
+      RACK_ENV: production
