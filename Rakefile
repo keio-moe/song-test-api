@@ -1,7 +1,7 @@
 require 'yaml'
 
 namespace :run do
-  task :dev do
+  task :serve do
     sh 'rackup'
   end
 

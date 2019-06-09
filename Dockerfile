@@ -8,4 +8,3 @@ RUN bundle install
 COPY . /app
 
 ENTRYPOINT [ "./wait-for-postgres.sh", "bash", "./entrypoint.sh"]
-  
