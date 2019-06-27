@@ -1,6 +1,8 @@
 class WorldMusicSimilarityService < ExperimentService
   class << self
-    PAIRS = (0...20).to_a.combination(2).to_a
+    SONGS = 5
+    PAIRS = (0...SONGS).to_a.combination(2).to_a
+    # PAIRS = (0...20).to_a.combination(2).to_a
 
     def create(options)
       raise NotFoundError.new('Experiment', 'Evaluation Not Finished') if Experiment.where(
@@ -35,7 +37,30 @@ class WorldMusicSimilarityService < ExperimentService
     end
 
     def export
-      raise NotImplementedError.new
+      Experiment.where(
+        model: 'WorldMusicSimilarityEntry',
+      ).map do |exp|
+        res = exp.entries.order(:pair_id).map do |pair|
+          {
+            song_a: PAIRS[pair.pair_id][0],
+            song_b: PAIRS[pair.pair_id][1],
+            similarity: pair.similarity,
+          }
+        end
+
+        matrix = Array.new(SONGS) { Array.new(SONGS) }
+        res.each do |row|
+          matrix[row[:song_a]][row[:song_b]] = row[:similarity]
+          matrix[row[:song_b]][row[:song_a]] = row[:similarity]
+        end
+
+        File.open("./db/similarity_#{exp.username}.csv", 'w') { |file| file.write(matrix.map { |row| row.join(',') }.join("\n")) }
+
+        { 
+          username: exp.username,
+          matrix: matrix.map { |row| row.join(',') }.join("\n"),
+        }
+      end
     end
   end
 

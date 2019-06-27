@@ -35,6 +35,7 @@ EXPERIMENT_ROUTE = proc do
   # Export Datasets
   get '/:experiment/export' do |experiment|
     service = UtilService.experiment(experiment)
-    yajl :export, locals: service.export
+    JSON.pretty_generate service.export
+    # yajl :export, locals: service.export
   end
 end
