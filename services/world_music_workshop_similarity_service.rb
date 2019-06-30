@@ -1,4 +1,4 @@
-class WorldMusicSimilarityService < ExperimentService
+class WorldMusicWorkshopSimilarityService < ExperimentService
   class << self
     SONGS = 20
     PAIRS = (0...SONGS).to_a.combination(2).to_a
@@ -6,38 +6,38 @@ class WorldMusicSimilarityService < ExperimentService
     def create(options)
       raise NotFoundError.new('Experiment', 'Evaluation Not Finished') if Experiment.where(
         username: options['username'],
-        model: 'WorldMusicEvaluationEntry',
+        model: 'WorldMusicWorkshopEvaluationEntry',
       )&.first.nil?
 
       DB.transaction do
         exp = Experiment.create(
           username: options['username'],
-          model: 'WorldMusicSimilarityEntry',
+          model: 'WorldMusicWorkshopSimilarityEntry',
         )
 
         PAIRS.length.times.to_a.shuffle.each do |i|
-          WorldMusicSimilarityEntry.create(
+          WorldMusicWorkshopSimilarityEntry.create(
             experiment: exp,
             pair_id: i,
           )
         end
 
-        return WorldMusicSimilarityService.new(exp)
+        return WorldMusicWorkshopSimilarityService.new(exp)
       end
     end
   
     def find(options)
       exp = Experiment.where(
         username: options['username'],
-        model: 'WorldMusicSimilarityEntry',
+        model: 'WorldMusicWorkshopSimilarityEntry',
       )&.first
       raise NotFoundError.new('Experiment', 'No Such Experiment Existed') if exp.nil?
-      WorldMusicSimilarityService.new(exp)
+      WorldMusicWorkshopSimilarityService.new(exp)
     end
 
     def export
       Experiment.where(
-        model: 'WorldMusicSimilarityEntry',
+        model: 'WorldMusicWorkshopSimilarityEntry',
       ).map do |exp|
         res = exp.entries.order(:pair_id).map do |pair|
           {
@@ -65,6 +65,12 @@ class WorldMusicSimilarityService < ExperimentService
     @entity = entity
   end
 
+  def offset
+    cat = @entity.username[-1].to_i
+    raise NotFoundError.new('Entity', 'No Such Category') unless (0...6).include?(cat) # 6 Groups
+    @entity.username[-1].to_i * WorldMusicWorkshopSimilarityService.singleton_class::SONGS
+  end
+
   def next
     entity = @entity.entries.where(edited: false).order(:id).first
     raise NotFoundError.new('Entity', 'Experiment Finished') if entity.nil?
@@ -74,11 +80,11 @@ class WorldMusicSimilarityService < ExperimentService
       wavs: [
         {
           label: 'A',
-          entity: "/static/world_music/#{WorldMusicSimilarityService.singleton_class::PAIRS[entity.pair_id][0]}.mp3",
+          entity: "/static/world_music_workshop/#{WorldMusicWorkshopSimilarityService.singleton_class::PAIRS[entity.pair_id][0] + offset}.mp3",
         },
         {
           label: 'B',
-          entity: "/static/world_music/#{WorldMusicSimilarityService.singleton_class::PAIRS[entity.pair_id][1]}.mp3",
+          entity: "/static/world_music_workshop/#{WorldMusicWorkshopSimilarityService.singleton_class::PAIRS[entity.pair_id][1] + offset}.mp3",
         },
       ],
     }
