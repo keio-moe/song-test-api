@@ -1,6 +1,6 @@
 class WorldMusicWorkshopSimilarityService < ExperimentService
   class << self
-    SONGS = 20
+    SONGS = 5
     PAIRS = (0...SONGS).to_a.combination(2).to_a
 
     def create(options)
