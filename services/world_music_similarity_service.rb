@@ -53,7 +53,7 @@ class WorldMusicSimilarityService < ExperimentService
           matrix[row[:song_b]][row[:song_a]] = row[:similarity]
         end
 
-        { 
+        {
           username: exp.username,
           matrix: matrix.map { |row| row.join(',') }.join("\n"),
         }

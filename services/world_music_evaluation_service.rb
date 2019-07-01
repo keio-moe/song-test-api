@@ -30,7 +30,33 @@ class WorldMusicEvaluationService < ExperimentService
     end
 
     def export
-      raise NotImplementedError.new
+      Experiment.where(
+        model: 'WorldMusicEvaluationEntry',
+      ).map do |exp|
+        res = exp.entries.order(:song_id).map do |pair|
+          {
+            song_id: pair.song_id,
+            overlap: pair.overlap,
+            creativity: pair.creativity,
+            likeness: pair.likeness,
+            tempo: pair.tempo,
+            consonance: pair.consonance,
+            emotion: pair.emotion,
+            decoration: pair.decoration,
+            range: pair.range,
+            quality: pair.quality,
+            rhythm: pair.rhythm,
+            excitingness: pair.excitingness,
+            groove: pair.groove,
+            timbre: pair.timbre,
+            edited: pair.edited,
+          }
+        end
+        {
+          username: exp.username,
+          matrix: res,
+        }
+      end
     end
   end
 

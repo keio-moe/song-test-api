@@ -36,7 +36,23 @@ class WorldMusicWorkshopRankService < ExperimentService
     end
 
     def export
-      # TODO
+      Experiment.where(
+        model: 'WorldMusicWorkshopRankEntry',
+      ).map do |exp|
+        res = exp.entries.order(:pair_id).map do |pair|
+          {
+            song_a: PAIRS[pair.pair_id][0],
+            song_b: PAIRS[pair.pair_id][1],
+            song_c: PAIRS[pair.pair_id][2],
+            option: pair.option,
+          }
+        end
+
+        {
+          username: exp.username,
+          matrix: res,
+        }
+      end
     end
   end
 
