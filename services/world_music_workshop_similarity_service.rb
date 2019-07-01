@@ -6,7 +6,7 @@ class WorldMusicWorkshopSimilarityService < ExperimentService
     def create(options)
       raise NotFoundError.new('Experiment', 'Evaluation Not Finished') if Experiment.where(
         username: options['username'],
-        model: 'WorldMusicWorkshopSimilarityEntry',
+        model: 'WorldMusicWorkshopEvaluationEntry',
       )&.first.nil?
 
       DB.transaction do

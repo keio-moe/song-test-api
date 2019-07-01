@@ -6,7 +6,7 @@ class WorldMusicWorkshopRankService < ExperimentService
     def create(options)
       raise NotFoundError.new('Experiment', 'Evaluation Not Finished') if Experiment.where(
         username: options['username'],
-        model: 'WorldMusicWorkshopRankEntry',
+        model: 'WorldMusicWorkshopEvaluationEntry',
       )&.first.nil?
 
       DB.transaction do
@@ -77,7 +77,6 @@ class WorldMusicWorkshopRankService < ExperimentService
     entry = @entity.entries.where(id: options['id'])&.first
     raise NotFoundError.new('Entry Not Existed') if entry.nil?
     entry.option = options['option']
-    entry.likeness = options['likeness']
     entry.edited = true
     entry.save
     nil
