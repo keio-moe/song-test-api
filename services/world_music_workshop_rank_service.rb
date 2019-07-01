@@ -1,63 +1,42 @@
-class WorldMusicWorkshopSimilarityService < ExperimentService
+class WorldMusicWorkshopRankService < ExperimentService
   class << self
     SONGS = 5
-    PAIRS = (0...SONGS).to_a.combination(2).to_a
+    PAIRS = (0...SONGS).to_a.combination(3).to_a
 
     def create(options)
       raise NotFoundError.new('Experiment', 'Evaluation Not Finished') if Experiment.where(
         username: options['username'],
-        model: 'WorldMusicWorkshopSimilarityEntry',
+        model: 'WorldMusicWorkshopRankEntry',
       )&.first.nil?
 
       DB.transaction do
         exp = Experiment.create(
           username: options['username'],
-          model: 'WorldMusicWorkshopSimilarityEntry',
+          model: 'WorldMusicWorkshopRankEntry',
         )
 
         PAIRS.length.times.to_a.shuffle.each do |i|
-          WorldMusicWorkshopSimilarityEntry.create(
+          WorldMusicWorkshopRankEntry.create(
             experiment: exp,
             pair_id: i,
           )
         end
 
-        return WorldMusicWorkshopSimilarityService.new(exp)
+        return WorldMusicWorkshopRankService.new(exp)
       end
     end
   
     def find(options)
       exp = Experiment.where(
         username: options['username'],
-        model: 'WorldMusicWorkshopSimilarityEntry',
+        model: 'WorldMusicWorkshopRankEntry',
       )&.first
       raise NotFoundError.new('Experiment', 'No Such Experiment Existed') if exp.nil?
-      WorldMusicWorkshopSimilarityService.new(exp)
+      WorldMusicWorkshopRankService.new(exp)
     end
 
     def export
-      Experiment.where(
-        model: 'WorldMusicWorkshopSimilarityEntry',
-      ).map do |exp|
-        res = exp.entries.order(:pair_id).map do |pair|
-          {
-            song_a: PAIRS[pair.pair_id][0],
-            song_b: PAIRS[pair.pair_id][1],
-            similarity: pair.similarity,
-          }
-        end
-
-        matrix = Array.new(SONGS) { Array.new(SONGS) }
-        res.each do |row|
-          matrix[row[:song_a]][row[:song_b]] = row[:similarity]
-          matrix[row[:song_b]][row[:song_a]] = row[:similarity]
-        end
-
-        { 
-          username: exp.username,
-          matrix: matrix.map { |row| row.join(',') }.join("\n"),
-        }
-      end
+      # TODO
     end
   end
 
@@ -68,7 +47,7 @@ class WorldMusicWorkshopSimilarityService < ExperimentService
   def offset
     cat = @entity.username[-1].to_i
     raise NotFoundError.new('Entity', 'No Such Category') unless (0...6).include?(cat) # 6 Groups
-    @entity.username[-1].to_i * WorldMusicWorkshopSimilarityService.singleton_class::SONGS
+    @entity.username[-1].to_i * WorldMusicWorkshopRankService.singleton_class::SONGS
   end
 
   def next
@@ -80,11 +59,15 @@ class WorldMusicWorkshopSimilarityService < ExperimentService
       wavs: [
         {
           label: 'A',
-          entity: "/static/world_music_workshop/#{WorldMusicWorkshopSimilarityService.singleton_class::PAIRS[entity.pair_id][0] + offset}.mp3",
+          entity: "/static/world_music_workshop/#{WorldMusicWorkshopRankService.singleton_class::PAIRS[entity.pair_id][0] + offset}.mp3",
         },
         {
           label: 'B',
-          entity: "/static/world_music_workshop/#{WorldMusicWorkshopSimilarityService.singleton_class::PAIRS[entity.pair_id][1] + offset}.mp3",
+          entity: "/static/world_music_workshop/#{WorldMusicWorkshopRankService.singleton_class::PAIRS[entity.pair_id][1] + offset}.mp3",
+        },
+        {
+          label: 'C',
+          entity: "/static/world_music_workshop/#{WorldMusicWorkshopRankService.singleton_class::PAIRS[entity.pair_id][2] + offset}.mp3",
         },
       ],
     }
@@ -93,7 +76,7 @@ class WorldMusicWorkshopSimilarityService < ExperimentService
   def update(options)
     entry = @entity.entries.where(id: options['id'])&.first
     raise NotFoundError.new('Entry Not Existed') if entry.nil?
-    entry.similarity = options['similarity']
+    entry.option = options['option']
     entry.likeness = options['likeness']
     entry.edited = true
     entry.save
