@@ -30,7 +30,19 @@ class CopyrightWorkshopService < ExperimentService
     end
 
     def export
-      raise NotImplementedError.new
+      Experiment.where(
+        model: 'CopyrightWorkshopEntry',
+      ).map do |exp|
+        {
+          username: exp.username,
+          res: exp.entries.map { |row| {
+            id: row.pair_id,
+            similarity: row.similarity,
+            infringe: row.infringe,
+            answered: row.edited,
+          } }
+        }
+      end
     end
   end
 
