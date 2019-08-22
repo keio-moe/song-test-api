@@ -62,9 +62,9 @@ class WorldMusicWorkshopRankService < ExperimentService
   end
 
   def offset
-    cat = @entity.username[-1].to_i
+    cat = @entity.username[0].to_i
     raise NotFoundError.new('Entity', 'No Such Category') unless (0...6).include?(cat) # 6 Groups
-    @entity.username[-1].to_i * WorldMusicWorkshopRankService.singleton_class::SONGS
+    @entity.username[0].to_i * WorldMusicWorkshopRankService.singleton_class::SONGS
   end
 
   def next
