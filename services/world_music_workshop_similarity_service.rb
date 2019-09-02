@@ -44,18 +44,23 @@ class WorldMusicWorkshopSimilarityService < ExperimentService
             song_a: PAIRS[pair.pair_id][0],
             song_b: PAIRS[pair.pair_id][1],
             similarity: pair.similarity,
+            likeness: pair.likeness,
           }
         end
 
-        matrix = Array.new(SONGS) { Array.new(SONGS) }
+        similarity_matrix = Array.new(SONGS) { Array.new(SONGS) }
+        likeness_matrix = Array.new(SONGS) { Array.new(SONGS) }
         res.each do |row|
-          matrix[row[:song_a]][row[:song_b]] = row[:similarity]
-          matrix[row[:song_b]][row[:song_a]] = row[:similarity]
+          similarity_matrix[row[:song_a]][row[:song_b]] = row[:similarity]
+          similarity_matrix[row[:song_b]][row[:song_a]] = row[:similarity]
+          likeness_matrix[row[:song_a]][row[:song_b]] = row[:likeness]
+          likeness_matrix[row[:song_b]][row[:song_a]] = row[:likeness]
         end
 
         { 
           username: exp.username,
-          matrix: matrix.map { |row| row.join(',') }.join("\n"),
+          similarity: similarity_matrix.map { |row| row.join(',') }.join("\n"),
+          likeness: likeness_matrix.map { |row| row.join(',') }.join("\n"),
         }
       end
     end
