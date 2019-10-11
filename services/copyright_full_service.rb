@@ -1,7 +1,6 @@
 class CopyrightFullService < ExperimentService
+  PAIR_SIZE = 14 * 3 * 2 # (Full + Melody + Lyrics) * Random
   class << self
-    PAIR_SIZE = 14 * 3 # Full + Melody + Lyrics
-
     def create(options)
       DB.transaction do
         exp = Experiment.create(
@@ -10,10 +9,21 @@ class CopyrightFullService < ExperimentService
         )
 
         PAIR_SIZE.times.to_a.shuffle.each do |i|
-          CopyrightFullEntry.create(
-            experiment: exp,
-            pair_id: i,
-          )
+          if i < PAIR_SIZE / 2
+            CopyrightFullEntry.create(
+              experiment: exp,
+              pair_id: i,
+            )
+          else
+            song_a = (0...14).to_a.sample(1)[0]
+            song_b = ((0...14).to_a - [song_a]).sample(1)[0]
+            CopyrightFullEntry.create(
+              experiment: exp,
+              pair_id: i,
+              song_a: song_a,
+              song_b: song_b,
+            )
+          end
         end
 
         return CopyrightFullService.new(exp)
@@ -90,7 +100,37 @@ class CopyrightFullService < ExperimentService
 
       res[:lyrics] << {
         label: 'B',
-        entity: "#{pair_id - 30}b",
+        entity: "#{pair_id - 28}b",
+      }
+    elsif (42...56).include?(pair_id)
+      res[:wavs] << {
+        label: 'A',
+        entity: "/static/copyright_full/full/#{entity.song_a}a.mp3",
+      }
+
+      res[:wavs] << {
+        label: 'B',
+        entity: "/static/copyright_full/full/#{entity.song_b}b.mp3",
+      }
+    elsif (56...70).include?(pair_id)
+      res[:wavs] << {
+        label: 'A',
+        entity: "/static/copyright_full/melody/#{entity.song_a}a.mp3",
+      }
+
+      res[:wavs] << {
+        label: 'B',
+        entity: "/static/copyright_full/melody/#{entity.song_b}b.mp3",
+      }
+    elsif (70...84).include?(pair_id)
+      res[:lyrics] << {
+        label: 'A',
+        entity: "#{entity.song_a}a",
+      }
+
+      res[:lyrics] << {
+        label: 'B',
+        entity: "#{entity.song_b}b",
       }
     end
     
