@@ -72,7 +72,7 @@ class CopyrightFullService < ExperimentService
       lyrics: [],
     }
 
-    if (0...14).include?(pair_id)
+    if (0...17).include?(pair_id)
       res[:wavs] << {
         label: 'A',
         entity: "/static/copyright_full/full/#{pair_id}a.mp3",
@@ -82,27 +82,27 @@ class CopyrightFullService < ExperimentService
         label: 'B',
         entity: "/static/copyright_full/full/#{pair_id}b.mp3",
       }
-    elsif (14...28).include?(pair_id)
+    elsif (17...34).include?(pair_id)
       res[:wavs] << {
         label: 'A',
-        entity: "/static/copyright_full/melody/#{pair_id - 14}a.mp3",
+        entity: "/static/copyright_full/melody/#{pair_id - 17}a.mp3",
       }
 
       res[:wavs] << {
         label: 'B',
-        entity: "/static/copyright_full/melody/#{pair_id - 14}b.mp3",
+        entity: "/static/copyright_full/melody/#{pair_id - 17}b.mp3",
       }
-    elsif (28...42).include?(pair_id)
+    elsif (34...51).include?(pair_id)
       res[:lyrics] << {
         label: 'A',
-        entity: "#{pair_id - 28}a",
+        entity: "#{pair_id - 34}a",
       }
 
       res[:lyrics] << {
         label: 'B',
-        entity: "#{pair_id - 28}b",
+        entity: "#{pair_id - 34}b",
       }
-    elsif (42...56).include?(pair_id)
+    elsif (51...68).include?(pair_id)
       res[:wavs] << {
         label: 'A',
         entity: "/static/copyright_full/full/#{entity.song_a}a.mp3",
@@ -112,7 +112,7 @@ class CopyrightFullService < ExperimentService
         label: 'B',
         entity: "/static/copyright_full/full/#{entity.song_b}b.mp3",
       }
-    elsif (56...70).include?(pair_id)
+    elsif (68...85).include?(pair_id)
       res[:wavs] << {
         label: 'A',
         entity: "/static/copyright_full/melody/#{entity.song_a}a.mp3",
@@ -122,7 +122,7 @@ class CopyrightFullService < ExperimentService
         label: 'B',
         entity: "/static/copyright_full/melody/#{entity.song_b}b.mp3",
       }
-    elsif (70...84).include?(pair_id)
+    elsif (85...102).include?(pair_id)
       res[:lyrics] << {
         label: 'A',
         entity: "#{entity.song_a}a",
