@@ -1,5 +1,5 @@
 class CopyrightFullService < ExperimentService
-  PAIR_SIZE = 14 * 3 * 2 # (Full + Melody + Lyrics) * Random
+  PAIR_SIZE = 17 * 3 * 2 # (Full + Melody + Lyrics) * Random
   class << self
     def create(options)
       DB.transaction do
@@ -15,8 +15,8 @@ class CopyrightFullService < ExperimentService
               pair_id: i,
             )
           else
-            song_a = (0...14).to_a.sample(1)[0]
-            song_b = ((0...14).to_a - [song_a]).sample(1)[0]
+            song_a = (0...17).to_a.sample(1)[0]
+            song_b = ((0...17).to_a - [song_a]).sample(1)[0]
             CopyrightFullEntry.create(
               experiment: exp,
               pair_id: i,
