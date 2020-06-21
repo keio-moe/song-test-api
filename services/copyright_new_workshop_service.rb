@@ -1,5 +1,5 @@
 class CopyrightNewWorkshopService < ExperimentService
-  SONG_NUM = 8
+  SONG_NUM = 4
   PAIR_SIZE = SONG_NUM * 3 * 2 # (Full + Melody + Lyrics) * Random
   class << self
     def create(options)
