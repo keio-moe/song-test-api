@@ -2,22 +2,20 @@ version: '3'
 services:
   db:
     image: postgres:12
+    restart: always
     volumes:
-      - music_postgres:/var/lib/postgresql/data
+      - ./.persistence/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
 
   web:
-    image: song-test-api:latest
+    build: .
+    restart: always
     volumes:
       - .:/app
     ports:
-      - 3001:3000
+      - 127.0.0.1:3001:3000
     depends_on:
       - db
     environment:
       RACK_ENV: production
-
-volumes:
-  music_postgres:
-    driver: local
