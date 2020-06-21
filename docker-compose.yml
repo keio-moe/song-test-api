@@ -12,7 +12,9 @@ services:
     volumes:
       - .:/app
     ports:
-      - 127.0.0.1:3001:3000
+      - mode: host
+        target: 127.0.0.1:3001
+        published: 3000
     depends_on:
       - db
     environment:
