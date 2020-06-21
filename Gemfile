@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 # Gems for basic structure
-gem 'bundler', '~> 1.13'
 gem 'rake', '~> 12.3'
 gem 'rspec', '~> 3.0'
 

@@ -1,15 +1,15 @@
 version: '3'
 services:
   db:
-    image: postgres:10
+    image: postgres:12
     restart: always
     volumes:
-      - ./.persistence/db:/var/lib/postgresql/data
+      - music_postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
 
   web:
-    build: .
+    image: song-test-api:latest
     restart: always
     volumes:
       - .:/app
