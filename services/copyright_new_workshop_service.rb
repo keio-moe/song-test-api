@@ -83,7 +83,7 @@ class CopyrightNewWorkshopService < ExperimentService
         label: 'B',
         entity: "/static/copyright_new_workshop/full/#{pair_id}b.mp3",
       }
-    elsif (SONG_NUM...SONG_NUM * 2).include?(pair_id)
+    elsif (SONG_NUM...SONG_NUM*2).include?(pair_id)
       res[:wavs] << {
         label: 'A',
         entity: "/static/copyright_new_workshop/melody/#{pair_id - SONG_NUM}a.mp3",
@@ -93,7 +93,7 @@ class CopyrightNewWorkshopService < ExperimentService
         label: 'B',
         entity: "/static/copyright_new_workshop/melody/#{pair_id - SONG_NUM}b.mp3",
       }
-    elsif (SONG_NUM * 2...SONG_NUM * 3).include?(pair_id)
+    elsif (SONG_NUM*2...SONG_NUM*3).include?(pair_id)
       res[:lyrics] << {
         label: 'A',
         entity: "#{pair_id - SONG_NUM * 2}a",
