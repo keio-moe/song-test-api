@@ -2,7 +2,6 @@ version: '3'
 services:
   db:
     image: postgres:12
-    restart: always
     volumes:
       - music_postgres:/var/lib/postgresql/data
     environment:
@@ -10,7 +9,6 @@ services:
 
   web:
     image: song-test-api:latest
-    restart: always
     volumes:
       - .:/app
     ports:
@@ -19,3 +17,7 @@ services:
       - db
     environment:
       RACK_ENV: production
+
+volumes:
+  music_postgres:
+    driver: local
