@@ -52,7 +52,7 @@ class IndianMusicEvaluationService < ExperimentService
               instrument_vocals: pair.instrument_vocals,
               instrument_overlap: pair.instrument_overlap,
               instrument_tone_blend: pair.instrument_tone_blend,
-              instrument_rhythm_blend: pair.instrument_tone_blend,
+              instrument_rhythm_blend: pair.instrument_rhythm_blend,
               edited: pair.edited,
             }
           end
