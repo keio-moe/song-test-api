@@ -20,25 +20,12 @@ Sequel.migration do
         Integer :groove, null: false, default: 0
         Integer :timbre, null: false, default: 0
         Integer :instrument_vocals, null: false, default: 0
-        Integer :instrument_vocals, null: false, default: 0
-        Integer :instrument_vocals, null: false, default: 0
         Integer :instrument_overlap, null: false, default: 0
         Integer :instrument_tone_blend, null: false, default: 0
         Integer :instrument_rhythm_blend, null: false, default: 0
   
         foreign_key :experiment_id, :experiments, null: false, key: [:id]
         unique [:song_id, :experiment_id]
-      end
-  
-      create_table(:world_music_yamaha_rank_entries) do
-        primary_key :id
-        TrueClass :edited, null: false, default: false
-        Integer :pair_id, null: false
-  
-        Integer :option, null: false, default: 0
-  
-        foreign_key :experiment_id, :experiments, null: false, key: [:id]
-        unique [:pair_id, :experiment_id]
       end
     end
   end
