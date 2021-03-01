@@ -1,6 +1,6 @@
 class IndianMusicEvaluationService < ExperimentService
   class << self
-    SONG_SIZE = 20
+    SONG_SIZE = 30
 
     def create(options)
       DB.transaction do
@@ -35,21 +35,22 @@ class IndianMusicEvaluationService < ExperimentService
       ).map do |exp|
         res = exp.entries.order(:song_id).map do |pair|
           {
-            song_id: pair.song_id,
-            instrument: pair.overlap,
-            creativity: pair.creativity,
-            likeness: pair.likeness,
-            tempo: pair.tempo,
+            id: pair.song_id,
+            ornamentation: pair.ornamentation,
+            grooviness: pair.grooviness,
+            familiarity: pair.familiarity,
+            liking: pair.liking,
             consonance: pair.consonance,
-            emotion: pair.emotion,
-            decoration: pair.decoration,
-            range: pair.range,
-            quality: pair.quality,
-            rhythm: pair.rhythm,
-            excitingness: pair.excitingness,
-            groove: pair.groove,
-            timbre: pair.timbre,
-            instrument_vocals: pair.instrument_vocals,
+            valence: pair.valence,
+            excitement: pair.excitement,
+            sound_quality: pair.sound_quality,
+            tempo: pair.tempo,
+            rhythmic_regularity: pair.rhythmic_regularity,
+            vocal_range: pair.vocal_range,
+            vocal_tension: pair.vocal_tension,
+            vocal_texture: pair.vocal_texture,
+            non_vocal_instruments: pair.non_vocal_instruments,
+            instrument_vocal_overlap: pair.instrument_vocal_overlap,
             instrument_overlap: pair.instrument_overlap,
             instrument_tone_blend: pair.instrument_tone_blend,
             instrument_rhythm_blend: pair.instrument_rhythm_blend,
@@ -76,7 +77,7 @@ class IndianMusicEvaluationService < ExperimentService
       progress: @entity.entries.where(edited: true).count.to_f / @entity.entries.count,
       wavs: [{
         label: 'Sample',
-        entity: "/static/world_music/#{entity.song_id}.mp3",
+        entity: "/static/indian_music/sample#{entity.song_id}.mp3",
       }],
     }
   end
@@ -84,20 +85,21 @@ class IndianMusicEvaluationService < ExperimentService
   def update(options)
     entry = @entity.entries.where(id: options['id'])&.first
     raise NotFoundError.new('Entry does not exist') if entry.nil?
-    entry.overlap = options['overlap']
-    entry.creativity = options['creativity']
-    entry.likeness = options['likeness']
-    entry.tempo = options['tempo']
+    entry.ornamentation = options['ornamentation']
+    entry.grooviness = options['grooviness']
+    entry.familarity = options['familarity']
+    entry.liking = options['liking']
     entry.consonance = options['consonance']
-    entry.emotion = options['emotion']
-    entry.decoration = options['decoration']
-    entry.range = options['range']
-    entry.quality = options['quality']
-    entry.rhythm = options['rhythm']
-    entry.excitingness = options['excitingness']
-    entry.groove = options['groove']
-    entry.timbre = options['timbre']
-    entry.instrument_vocals = options['instrument_vocals']
+    entry.valence = options['valence']
+    entry.excitement = options['excitement']
+    entry.sound_quality = options['sound_quality']
+    entry.tempo = options['tempo']
+    entry.rhythmic_regularity = options['rhythmic_regularity']
+    entry.vocal_range = options['vocal_range']
+    entry.vocal_tension = options['vocal_tension']
+    entry.vocal_texture = options['vocal_texture']
+    entry.non_vocal_instruments = options['non_vocal_instruments']
+    entry.instrument_vocal_overlap = options['instrument_vocal_overlap']
     entry.instrument_overlap = options['instrument_overlap']
     entry.instrument_tone_blend = options['instrument_tone_blend']
     entry.instrument_rhythm_blend = options['instrument_rhythm_blend']

@@ -6,20 +6,21 @@ Sequel.migration do
       TrueClass :edited, null: false, default: false
       Integer :song_id, null: false
 
-      Integer :overlap, null: false, default: 0
-      Integer :creativity, null: false, default: 0
-      Integer :likeness, null: false, default: 0
-      Integer :tempo, null: false, default: 0
+      Integer :ornamentation, null: false, default: 0
+      Integer :grooviness, null: false, default: 0
+      Integer :familiarity, null: false, default: 0
+      Integer :liking, null: false, default: 0
       Integer :consonance, null: false, default: 0
-      Integer :emotion, null: false, default: 0
-      Integer :decoration, null: false, default: 0
-      Integer :range, null: false, default: 0
-      Integer :quality, null: false, default: 0
-      Integer :rhythm, null: false, default: 0
-      Integer :excitingness, null: false, default: 0
-      Integer :groove, null: false, default: 0
-      Integer :timbre, null: false, default: 0
-      Integer :instrument_vocals, null: false, default: 0
+      Integer :valence, null: false, default: 0
+      Integer :excitement, null: false, default: 0
+      Integer :sound_quality, null: false, default: 0
+      Integer :tempo, null: false, default: 0
+      Integer :rhythmic_regularity, null: false, default: 0
+      Integer :vocal_range, null: false, default: 0
+      Integer :vocal_tension, null: false, default: 0
+      Integer :vocal_texture, null: false, default: 0
+      Integer :non_vocal_instruments, null: false, default: 0
+      Integer :instrument_vocal_overlap, null: false, default: 0
       Integer :instrument_overlap, null: false, default: 0
       Integer :instrument_tone_blend, null: false, default: 0
       Integer :instrument_rhythm_blend, null: false, default: 0
