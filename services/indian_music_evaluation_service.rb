@@ -87,7 +87,7 @@ class IndianMusicEvaluationService < ExperimentService
     raise NotFoundError.new('Entry does not exist') if entry.nil?
     entry.ornamentation = options['ornamentation']
     entry.grooviness = options['grooviness']
-    entry.familarity = options['familarity']
+    entry.familiarity = options['familiarity']
     entry.liking = options['liking']
     entry.consonance = options['consonance']
     entry.valence = options['valence']
