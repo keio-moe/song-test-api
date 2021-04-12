@@ -23,10 +23,10 @@ On linux install `libpq-dev`
 
 
 ### Install dependencies
-Bundle install
+`bundle install`
 
 ### Migrate db
-Rake db migrate
+`rake db:migrate`
 
 ### Serve
-Rake run serve
+`rake run:serve`
