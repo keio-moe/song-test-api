@@ -49,7 +49,6 @@ class IndianMusicEvaluationService < ExperimentService
             vocal_range: pair.vocal_range,
             vocal_tension: pair.vocal_tension,
             vocal_texture: pair.vocal_texture,
-            non_vocal_instruments: pair.non_vocal_instruments,
             instrument_vocal_overlap: pair.instrument_vocal_overlap,
             instrument_overlap: pair.instrument_overlap,
             instrument_tone_blend: pair.instrument_tone_blend,
@@ -98,7 +97,6 @@ class IndianMusicEvaluationService < ExperimentService
     entry.vocal_range = options['vocal_range']
     entry.vocal_tension = options['vocal_tension']
     entry.vocal_texture = options['vocal_texture']
-    entry.non_vocal_instruments = options['non_vocal_instruments']
     entry.instrument_vocal_overlap = options['instrument_vocal_overlap']
     entry.instrument_overlap = options['instrument_overlap']
     entry.instrument_tone_blend = options['instrument_tone_blend']
