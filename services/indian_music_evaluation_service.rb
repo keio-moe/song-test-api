@@ -1,6 +1,6 @@
 class IndianMusicEvaluationService < ExperimentService
   class << self
-    SONG_SIZE = 30
+    SONG_SIZE = 10
 
     def create(options)
       DB.transaction do
@@ -68,6 +68,12 @@ class IndianMusicEvaluationService < ExperimentService
     @entity = entity
   end
 
+  def offset
+    cat = @entity.username[-1].to_i
+    raise NotFoundError.new('Entity', 'No Such Category') unless (0...5).include?(cat) # 4 Groups
+    @entity.username[-1].to_i * 6
+  end
+# if song.id < 6 raw id . if id>6 +offset
   def next
     entity = @entity.entries.where(edited: false).order(:id).first
     raise NotFoundError.new('Entity', 'Experiment Finished') if entity.nil?
@@ -76,10 +82,37 @@ class IndianMusicEvaluationService < ExperimentService
       progress: @entity.entries.where(edited: true).count.to_f / @entity.entries.count,
       wavs: [{
         label: 'Sample',
-        entity: "/static/indian_music/sample#{entity.song_id}.mp3",
+        entity: "/static/world_music_workshop/#{entity.song_id + offset}.mp3",
       }],
     }
   end
+
+
+  def next
+    entity = @entity.entries.where(edited: false).order(:id).first
+    raise NotFoundError.new('Entity', 'Experiment Finished') if entity.nil?
+     
+    res = {
+      id: entity.id,
+      progress: @entity.entries.where(edited: true).count.to_f / @entity.entries.count,
+      wavs: []
+    }
+
+    if (0...5).include?(entity.id){
+      res[:wavs] << {
+        label: 'Sample',
+        entity: "/static/indian_music/sample#{entity.song_id}.mp3",
+      }
+    }
+    else 
+      res[:wavs] << {
+        label: 'Sample',
+        entity: "/static/indian_music/#{entity.song_id + offset}.mp3",
+      }
+    end
+    res
+  end
+  
 
   def update(options)
     entry = @entity.entries.where(id: options['id'])&.first
