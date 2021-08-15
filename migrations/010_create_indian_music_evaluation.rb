@@ -19,7 +19,6 @@ Sequel.migration do
       Integer :vocal_range, null: false, default: 0
       Integer :vocal_tension, null: false, default: 0
       Integer :vocal_texture, null: false, default: 0
-      Integer :non_vocal_instruments, null: false, default: 0
       Integer :instrument_vocal_overlap, null: false, default: 0
       Integer :instrument_overlap, null: false, default: 0
       Integer :instrument_tone_blend, null: false, default: 0

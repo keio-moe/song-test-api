@@ -25,7 +25,7 @@ class WorldMusicYamahaEvaluationService < ExperimentService
         username: options['username'],
         model: 'WorldMusicYamahaEvaluationEntry',
       )&.first
-      raise NotFoundError.new('Experiment', 'No Such Experiment Existed') if exp.nil?
+      raise NotFoundError.new('Experiment', 'No Such Experiment exists') if exp.nil?
       WorldMusicYamahaEvaluationService.new(exp)
     end
 

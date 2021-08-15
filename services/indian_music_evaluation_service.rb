@@ -1,6 +1,6 @@
 class IndianMusicEvaluationService < ExperimentService
   class << self
-    SONG_SIZE = 30
+    SONG_SIZE = 10
 
     def create(options)
       DB.transaction do
@@ -49,7 +49,6 @@ class IndianMusicEvaluationService < ExperimentService
             vocal_range: pair.vocal_range,
             vocal_tension: pair.vocal_tension,
             vocal_texture: pair.vocal_texture,
-            non_vocal_instruments: pair.non_vocal_instruments,
             instrument_vocal_overlap: pair.instrument_vocal_overlap,
             instrument_overlap: pair.instrument_overlap,
             instrument_tone_blend: pair.instrument_tone_blend,
@@ -69,6 +68,12 @@ class IndianMusicEvaluationService < ExperimentService
     @entity = entity
   end
 
+  def offset
+    cat = @entity.username[-1].to_i
+    raise NotFoundError.new('Entity', 'No Such Category') unless (0...5).include?(cat) # 4 Groups
+    @entity.username[-1].to_i * 6
+  end
+# if song.id < 6 raw id . if id>6 +offset
   def next
     entity = @entity.entries.where(edited: false).order(:id).first
     raise NotFoundError.new('Entity', 'Experiment Finished') if entity.nil?
@@ -77,10 +82,37 @@ class IndianMusicEvaluationService < ExperimentService
       progress: @entity.entries.where(edited: true).count.to_f / @entity.entries.count,
       wavs: [{
         label: 'Sample',
-        entity: "/static/indian_music/sample#{entity.song_id}.mp3",
+        entity: "/static/world_music_workshop/#{entity.song_id + offset}.mp3",
       }],
     }
   end
+
+
+  def next
+    entity = @entity.entries.where(edited: false).order(:id).first
+    raise NotFoundError.new('Entity', 'Experiment Finished') if entity.nil?
+     
+    res = {
+      id: entity.id,
+      progress: @entity.entries.where(edited: true).count.to_f / @entity.entries.count,
+      wavs: []
+    }
+
+    if (0...5).include?(entity.id){
+      res[:wavs] << {
+        label: 'Sample',
+        entity: "/static/indian_music/sample#{entity.song_id}.mp3",
+      }
+    }
+    else 
+      res[:wavs] << {
+        label: 'Sample',
+        entity: "/static/indian_music/#{entity.song_id + offset}.mp3",
+      }
+    end
+    res
+  end
+  
 
   def update(options)
     entry = @entity.entries.where(id: options['id'])&.first
@@ -98,7 +130,6 @@ class IndianMusicEvaluationService < ExperimentService
     entry.vocal_range = options['vocal_range']
     entry.vocal_tension = options['vocal_tension']
     entry.vocal_texture = options['vocal_texture']
-    entry.non_vocal_instruments = options['non_vocal_instruments']
     entry.instrument_vocal_overlap = options['instrument_vocal_overlap']
     entry.instrument_overlap = options['instrument_overlap']
     entry.instrument_tone_blend = options['instrument_tone_blend']
