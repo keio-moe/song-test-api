@@ -70,23 +70,9 @@ class IndianMusicEvaluationService < ExperimentService
 
   def offset
     cat = @entity.username[-1].to_i
-    raise NotFoundError.new('Entity', 'No Such Category') unless (0...5).include?(cat) # 4 Groups
+    raise NotFoundError.new('Entity', 'No Such Category') unless (0..4).include?(cat) # 4 Groups
     @entity.username[-1].to_i * 6
   end
-# if song.id < 6 raw id . if id>6 +offset
-  def next
-    entity = @entity.entries.where(edited: false).order(:id).first
-    raise NotFoundError.new('Entity', 'Experiment Finished') if entity.nil?
-    {
-      id: entity.id,
-      progress: @entity.entries.where(edited: true).count.to_f / @entity.entries.count,
-      wavs: [{
-        label: 'Sample',
-        entity: "/static/world_music_workshop/#{entity.song_id + offset}.mp3",
-      }],
-    }
-  end
-
 
   def next
     entity = @entity.entries.where(edited: false).order(:id).first
@@ -98,12 +84,11 @@ class IndianMusicEvaluationService < ExperimentService
       wavs: []
     }
 
-    if (0...5).include?(entity.id){
+    if (0..4).include?(entity.id)
       res[:wavs] << {
         label: 'Sample',
         entity: "/static/indian_music/sample#{entity.song_id}.mp3",
       }
-    }
     else 
       res[:wavs] << {
         label: 'Sample',
