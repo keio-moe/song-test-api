@@ -70,8 +70,8 @@ class IndianMusicEvaluationService < ExperimentService
 
   def offset
     cat = @entity.username[-1].to_i
-    raise NotFoundError.new('Entity', 'No Such Category') unless (0..4).include?(cat) # 4 Groups
-    @entity.username[-1].to_i * 6
+    raise NotFoundError.new('Entity', 'No Such Category') unless (0..5).include?(cat) # 6 Groups
+    @entity.username[-1].to_i * 4 + 6 # Each group has 4 songs to be tested, skip the first 6 songs
   end
 
   def next
@@ -84,7 +84,7 @@ class IndianMusicEvaluationService < ExperimentService
       wavs: []
     }
 
-    if (0..4).include?(entity.id)
+    if (0..5).include?(entity.id)
       res[:wavs] << {
         label: 'Sample',
         entity: "/static/indian_music/sample#{entity.song_id}.mp3",
