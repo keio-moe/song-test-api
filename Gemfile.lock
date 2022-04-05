@@ -43,7 +43,7 @@ GEM
       tilt (~> 2.0)
     sqlite3 (1.4.2)
     tilt (2.0.10)
-    yajl-ruby (1.4.1)
+    yajl-ruby (1.4.2)
 
 PLATFORMS
   ruby
